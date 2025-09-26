@@ -32,62 +32,8 @@ public class Main {
                     int numberAdd = scanner.nextInt();
                     scanner.nextLine();
 
-                    switch (numberAdd) {
-                        case 1:
-                            System.out.print("\nВведите название: ");
-                            String titleBook = scanner.nextLine();
-
-                            System.out.print("Введите автора: ");
-                            String authorBook = scanner.nextLine();
-
-                            System.out.print("Введите год: ");
-                            int yearBook = scanner.nextInt();
-
-                            scanner.nextLine();
-
-                            System.out.print("Введите ISBN: ");
-                            String isbnBook = scanner.nextLine();
-
-                            library.addPublication(new Book(titleBook, authorBook, yearBook, isbnBook));
-                            break;
-
-                        case 2:
-                            System.out.print("\nВведите название: ");
-                            String titleMagazine = scanner.nextLine();
-
-                            System.out.print("Введите автора: ");
-                            String authorMagazine = scanner.nextLine();
-
-                            System.out.print("Введите год: ");
-                            int yearMagazine = scanner.nextInt();
-
-                            scanner.nextLine();
-
-                            System.out.print("Введите номер выпуска: ");
-                            int issueNumberMagazine = scanner.nextInt();
-
-                            scanner.nextLine();
-
-                            library.addPublication(new Magazine(titleMagazine, authorMagazine, yearMagazine, issueNumberMagazine));
-                            break;
-
-                        case 3:
-                            System.out.print("\nВведите название: ");
-                            String titleNewspaper = scanner.nextLine();
-
-                            System.out.print("Введите автора: ");
-                            String authorNewspaper = scanner.nextLine();
-
-                            System.out.print("Введите год: ");
-                            int yearNewspaper = scanner.nextInt();
-
-                            scanner.nextLine();
-
-                            System.out.print("Введите день публикации: ");
-                            String publicationDay = scanner.nextLine();
-
-                            library.addPublication(new Newspaper(titleNewspaper, authorNewspaper, yearNewspaper, publicationDay));
-                            break;
+                    if (numberAdd >= 1 && numberAdd <= 3) {
+                        print(library, scanner, numberAdd);
                     }
                     break;
 
@@ -119,4 +65,28 @@ public class Main {
         } while (!end) ;
         scanner.close();
     }
+
+    public static void print(Library library,Scanner scanner, int numberAdd) {
+        System.out.print("\nВведите название: ");
+        String titleBook = scanner.nextLine();
+        System.out.print("Введите автора: ");
+        String authorBook = scanner.nextLine();
+        System.out.print("Введите год: ");
+        int yearBook = scanner.nextInt();
+        scanner.nextLine();
+        if (numberAdd == 1) {
+            System.out.print("Введите ISBN: ");
+            String isbnBook = scanner.nextLine();
+            library.addPublication(new Book (titleBook, authorBook, yearBook, isbnBook));
+        } else if (numberAdd == 2) {
+            System.out.print("Введите номер выпуска: ");
+            int issueNumberMagazine = scanner.nextInt();
+            library.addPublication(new Magazine (titleBook, authorBook, yearBook, issueNumberMagazine));
+        } else if (numberAdd == 3) {
+            System.out.print("Введите день публикации: ");
+            String publicationDay = scanner.nextLine();
+            library.addPublication(new Newspaper (titleBook, authorBook, yearBook, publicationDay));
+        }
+    }
+
 }
