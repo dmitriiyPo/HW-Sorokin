@@ -19,8 +19,8 @@ public class Main {
 
             switch (option) {
                 case 1 -> addBook(scanner, cm);
-                case 2 -> takeAndReturnBook(scanner, option, cm);
-                case 3 -> takeAndReturnBook(scanner, option, cm);
+                case 2 -> takeBook(scanner, cm);
+                case 3 -> returnBook(scanner, cm);
                 case 4 -> showBooks(cm);
                 case 5 -> end = true;
             }
@@ -62,24 +62,27 @@ public class Main {
         }
     }
 
-    public static void takeAndReturnBook(Scanner scanner, int option, CatalogManager cm) {
+    public static void takeBook(Scanner scanner, CatalogManager cm) {
         System.out.print("\nВведите название книги: ");
         String title = scanner.nextLine();
 
-        if (option == 2) {
-            try {
-                cm.takeBook(title);
-            } catch (NoCopyBookException e) {
-                System.out.println("\nОшибка копий: " + e.getMessage());
-            } catch (BookTitleNotFoundException e) {
-                System.out.println("\nОшибка: " + e.getMessage());
-            }
-        } else if (option == 3) {
-            try {
-                cm.returnBook(title);
-            } catch (BookTitleNotFoundException e) {
-                System.out.println("\nОшибка: " + e.getMessage());
-            }
+        try {
+            cm.takeBook(title);
+        } catch (NoCopyBookException e) {
+            System.out.println("\nОшибка копий: " + e.getMessage());
+        } catch (BookTitleNotFoundException e) {
+            System.out.println("\nОшибка: " + e.getMessage());
+        }
+    }
+
+    public static void returnBook(Scanner scanner, CatalogManager cm) {
+        System.out.print("\nВведите название книги: ");
+        String title = scanner.nextLine();
+
+        try {
+            cm.returnBook(title);
+        } catch (BookTitleNotFoundException e) {
+            System.out.println("\nОшибка: " + e.getMessage());
         }
     }
 
