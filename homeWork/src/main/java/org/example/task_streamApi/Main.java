@@ -95,13 +95,7 @@ public class Main {
                 .flatMap(order -> order.getProducts().stream())
                 .filter(product -> product.getCategory().equals("Toys"))
                 .distinct()
-                .map(product -> new Product(
-                        product.getId(),
-                        product.getName(),
-                        product.getCategory(),
-                        product.getPrice().multiply(new BigDecimal("0.9"))
-                ))
-                .map(Product::getPrice)
+                .map(product -> product.getPrice().multiply(new BigDecimal("0.9")))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         System.out.println("\nЗадание 3: Получите список продуктов из категории \"Toys\" и примените скидку 10% и получите сумму всех продуктов");
@@ -150,18 +144,19 @@ public class Main {
 
         //Задание 7 (Получите список заказов, сделанных 15-марта-2021, выведите id заказов в консоль и затем верните
         //список их продуктов.)
-        Map<Long, List<Product>> idOrderWithListProduct = customers.stream()
-                .flatMap(customer -> customer.getOrders().stream())
-                .filter(order -> order.getOrderDate().equals(LocalDate.of(2021, 3, 15)))
-                .distinct()
-                .collect(Collectors.toMap(
-                        Order::getId,
-                        order -> new ArrayList<>(order.getProducts())
-                ));
 
         System.out.println("\nЗадание 7: Получите список заказов, сделанных 15-марта-2021, выведите id заказов в консоль и затем верните\n" +
                 "список их продуктов.");
-        idOrderWithListProduct.forEach((id, product) -> System.out.println("id order: " + id + " -> " + product));
+
+        List<Product> idOrderWithListProduct = customers.stream()
+                .flatMap(customer -> customer.getOrders().stream())
+                .filter(order -> order.getOrderDate().equals(LocalDate.of(2021, 3, 15)))
+                .peek(order -> System.out.println("Order id: " + order.getId()))
+                .flatMap(order -> order.getProducts().stream())
+                .distinct()
+                .toList();
+
+        idOrderWithListProduct.forEach(System.out::println);
 
 
         //Задание 8 (Рассчитайте общую сумму всех заказов, сделанных в феврале 2021.)
