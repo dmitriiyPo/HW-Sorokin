@@ -32,8 +32,7 @@ public class UserService {
             throw new IllegalArgumentException("user with login " + login + " already exists");
         }
 
-        idCounter++;
-        User user = new User(idCounter, login, new ArrayList<>());
+        User user = new User(++idCounter, login, new ArrayList<>());
 
         Account defaultAccount = accountService.createAccount(user);
         user.getAccountList().add(defaultAccount);

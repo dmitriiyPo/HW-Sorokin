@@ -6,6 +6,8 @@ import org.example.spring_miniBank.properties.AccountProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -29,8 +31,7 @@ public class AccountService {
             throw new IllegalArgumentException("user cannot be null");
         }
 
-        idCounter++;
-        Account account = new Account(idCounter, user.getId(), accountProperties.getDefaultAmount());
+        Account account = new Account(++idCounter, user.getId(), accountProperties.getDefaultAmount());
         accountsMap.put(idCounter, account);
         return account;
     }
@@ -93,9 +94,20 @@ public class AccountService {
 
         from.setMoneyAmount(from.getMoneyAmount() - amount);
 
-        int amountToTransfer = from.getUserId() == to.getUserId()
-                ? amount
-                : (int) Math.round((amount * accountProperties.getTransferCommission()));
+
+        BigDecimal amountBD = BigDecimal.valueOf(amount);
+        BigDecimal commissionRate = accountProperties.getTransferCommission();
+        BigDecimal amountToTransferBD;
+
+        if (from.getUserId() == to.getUserId()) {
+            amountToTransferBD = amountBD;
+        } else {
+            BigDecimal commission = amountBD.multiply(commissionRate);
+            amountToTransferBD = amountBD.subtract(commission).setScale(2, RoundingMode.HALF_UP);
+        }
+
+
+        int amountToTransfer = amountToTransferBD.intValue();
 
         to.setMoneyAmount(to.getMoneyAmount() + amountToTransfer);
         return amount - amountToTransfer;
